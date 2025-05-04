@@ -10,7 +10,7 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 SRCDIR=$script_dir/../vim/src
 FEATURES=huge
 export CFLAGS="-Wno-deprecated-declarations"
-export CC=gcc-10
+export CC=gcc-8
 
 typeset -a CFG_OPTS
 CFG_OPTS+=( "--enable-perlinterp" )
