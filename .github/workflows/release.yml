@@ -119,6 +119,10 @@ jobs:
           RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100 \
               && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
 
+          # Thanks to: https://askubuntu.com/questions/1404499/how-to-install-lua5-3-in-ubuntu-18-04
+          RUN update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.3 130 \
+            && update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.3 130
+
           WORKDIR /workspace
           COPY . .
 
