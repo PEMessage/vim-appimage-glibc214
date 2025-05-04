@@ -124,7 +124,9 @@ jobs:
 
           # Set up environment
           RUN sysctl -w net.ipv6.conf.lo.disable_ipv6=0
-          RUN bash vim/ci/setup-xvfb.sh
+          RUN mkdir -p /etc/service/xvfb
+          RUN echo '#!/bin/sh\n\nexec Xvfb :99 -screen 0 1024x768x24 -ac +extension GLX +render -noreset' > /etc/service/xvfb/run
+          RUN chmod +x /etc/service/xvfb/run
 
           # Build Vim
           RUN bash scripts/build_vim.sh
