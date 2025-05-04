@@ -75,9 +75,18 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
 
+      - name: Set up fuse
+        run: |                                    
+          sudo apt-get update                     
+          sudo docker buildx create --buildkitd-flags '--allow-insecure-entitlement security.insecure' --name insecure-builder
+          sudo docker buildx use insecure-builder
+
+          sudo apt-get install -y libfuse2
+
       - name: Build and run Docker container
         run: |
           cat <<EOF > Dockerfile
+          # syntax=docker/dockerfile:1-labs
           FROM ubuntu:18.04
 
           ENV DEBIAN_FRONTEND=noninteractive
@@ -90,6 +99,7 @@ jobs:
               autoconf \
               automake \
               lcov \
+              libfuse2 \
               gettext \
               libcanberra-dev \
               libperl-dev \
@@ -140,12 +150,13 @@ jobs:
           # RUN (cd vim/src/gvim && make test) || bash scripts/dump_failed_screentests.sh
 
           # Create AppImages
-          RUN bash -e scripts/appimage.sh GVim
-          RUN bash -e scripts/appimage.sh Vim
+          RUN --security=insecure bash -e scripts/appimage.sh GVim
+          RUN --security=insecure bash -e scripts/appimage.sh Vim
           EOF
 
-          sudo docker build -t vim-appimage-builder .
-          sudo docker run --rm -v $(pwd):/output vim-appimage-builder sh -c "cp *.AppImage *.zsync /output/"
+          # Thanks to: https://github.com/moby/moby/issues/1916#issuecomment-1456960765
+          sudo docker buildx build --allow security.insecure -t vim-appimage-builder .
+          sudo docker run --privileged --rm -v $(pwd):/output vim-appimage-builder sh -c "cp *.AppImage *.zsync /output/"
 
       - name: Verify AppImages
         run: |
