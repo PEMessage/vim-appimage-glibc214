@@ -94,6 +94,8 @@ jobs:
           ENV TERM=xterm
           ENV CC=gcc
           ENV DEPLOY_GTK_VERSION=3
+          ENV GITHUB_ACTIONS=1
+          ENV GITHUB_WORKSPACE=/workspace
 
           # Install dependencies
           RUN apt-get update && apt-get install -y \
@@ -159,8 +161,8 @@ jobs:
           EOF
 
           # Thanks to: https://github.com/moby/moby/issues/1916#issuecomment-1456960765
-          sudo docker buildx build --allow security.insecure -t vim-appimage-builder .
-          sudo docker run --privileged --rm -v $(pwd):/output vim-appimage-builder sh -c "cp *.AppImage *.zsync /output/"
+          sudo docker buildx build --load --allow security.insecure -t vim-appimage-builder .
+          sudo docker run --privileged --rm -v $(pwd):/output vim-appimage-builder sh -c "cp *.AppImage *.zsync release.body /output/"
 
       - name: Verify AppImages
         run: |
