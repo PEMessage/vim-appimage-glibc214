@@ -1,8 +1,6 @@
 name: Release AppImage
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -95,7 +93,7 @@ jobs:
               gettext \
               libcanberra-dev \
               libperl-dev \
-              python2-dev \
+              python-dev \
               python3-dev \
               liblua5.3-dev \
               lua5.3 \
@@ -107,8 +105,8 @@ jobs:
               libtool-bin \
               at-spi2-core \
               libsodium-dev \
-              gcc-10 \
-              g++-10 \
+              gcc-8 \
+              g++-8 \
               make \
               git \
               xvfb \
@@ -118,8 +116,8 @@ jobs:
               && rm -rf /var/lib/apt/lists/*
 
           # Set up GCC-10 as default
-          RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
-              && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
+          RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100 \
+              && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
 
           WORKDIR /workspace
           COPY . .
