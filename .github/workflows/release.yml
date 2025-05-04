@@ -93,6 +93,7 @@ jobs:
           ENV DISPLAY=:99
           ENV TERM=xterm
           ENV CC=gcc
+          ENV DEPLOY_GTK_VERSION=3
 
           # Install dependencies
           RUN apt-get update && apt-get install -y \
@@ -111,6 +112,9 @@ jobs:
               tcl-dev \
               cscope \
               libgtk-3-dev \
+              libgtk-3-0 \
+              libgtk-3-bin \
+              libgtk-3-common \
               desktop-file-utils \
               libtool-bin \
               at-spi2-core \
@@ -150,8 +154,8 @@ jobs:
           # RUN (cd vim/src/gvim && make test) || bash scripts/dump_failed_screentests.sh
 
           # Create AppImages
-          RUN --security=insecure bash -e scripts/appimage.sh GVim
           RUN --security=insecure bash -e scripts/appimage.sh Vim
+          RUN --security=insecure bash -e scripts/appimage.sh GVim
           EOF
 
           # Thanks to: https://github.com/moby/moby/issues/1916#issuecomment-1456960765
