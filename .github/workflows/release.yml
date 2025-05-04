@@ -75,10 +75,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
-          sudo systemctl start docker
+        uses: docker/setup-docker-action@v4
 
       - name: Build and run Docker container
         run: |
