@@ -3,7 +3,7 @@
 # build vim
 #
 
-set -e
+set -xe
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 
