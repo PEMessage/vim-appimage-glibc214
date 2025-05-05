@@ -69,14 +69,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
-      - name: Fetch tags
+
+      - name: Update Vim
         run: |
-          git fetch --prune --unshallow --tags
-          git -C vim fetch --prune --unshallow --tags
-
-
+          git submodule update --init
+          git submodule update --remote
 
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
@@ -102,6 +99,10 @@ jobs:
           ENV DEPLOY_GTK_VERSION=3
           ENV GITHUB_ACTIONS=1
           ENV GITHUB_WORKSPACE=/workspace
+          ENV VIM_REF=${{ needs.check-updates-job.outputs.appimagetag }}
+
+          ARG GITHUB_REPOSITORY
+          ENV GITHUB_REPOSITORY=$GITHUB_REPOSITORY
 
           # Install dependencies
           RUN apt-get update && apt-get install -y \
@@ -167,7 +168,9 @@ jobs:
           EOF
 
           # Thanks to: https://github.com/moby/moby/issues/1916#issuecomment-1456960765
-          sudo docker buildx build --load --allow security.insecure -t vim-appimage-builder .
+          sudo docker buildx build \
+            --build-arg GITHUB_REPOSITORY=${GITHUB_REPOSITORY} \
+            --load --allow security.insecure -t vim-appimage-builder .
           sudo docker run --privileged --rm -v $(pwd):/output vim-appimage-builder sh -c "cp *.AppImage *.zsync release.body /output/"
 
       - name: Verify AppImages
