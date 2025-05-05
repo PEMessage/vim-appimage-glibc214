@@ -1,5 +1,11 @@
 [![Build Status](https://github.com/vim/vim-appimage/workflows/Release%20AppImage/badge.svg)](https://github.com/vim/vim-appimage/actions?query=workflow%3A%22Release+AppImage%22)
 
+# About this fork
+
+This fork try to build vim for older distro(glibc 2.14).
+To save ci time, skip test step and trigger mannually.
+use at your own risk.
+
 # Vim AppImage Repository
 
 This is a project for building a 64bit Gvim AppImage from the latest Vim snapshots.
