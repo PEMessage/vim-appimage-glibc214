@@ -133,6 +133,7 @@ jobs:
               make \
               git \
               xvfb \
+              libncurses-dev \
               wget \
               sudo \
               sysvinit-utils \
